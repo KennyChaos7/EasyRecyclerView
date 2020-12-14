@@ -1,19 +1,19 @@
 package com.easy.recyclerview;
 
 import android.content.Context;
-import androidx.annotation.LayoutRes;
-import androidx.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 
-import com.easy.recyclerview.BaseEasyHeader;
-import com.scwang.smart.refresh.layout.api.RefreshFooter;
-import com.scwang.smart.refresh.layout.api.RefreshHeader;
+import androidx.annotation.LayoutRes;
+import androidx.annotation.Nullable;
+
+import com.scwang.smart.refresh.footer.ClassicsFooter;
+import com.scwang.smart.refresh.header.ClassicsHeader;
 /**
  * @Auther: ou
  * @Time:   2020-12-12 0012 14:06
  * @Description:        工具类, 用来创建SmartLayout的Header和Footer<br/>
- *                      {@link EasyRecyclerView.Builder#setFooter(RefreshFooter)} {@link EasyRecyclerView.Builder#setHeader(RefreshHeader)}<br/>
+ *                      {@link EasyRecyclerView.Builder#setFooter(BaseEasyFooter)} {@link EasyRecyclerView.Builder#setHeader(BaseEasyHeader)}<br/>
  *                      也可以创建默认
  */
 public class EasyRecyclerViewUtils {
@@ -37,9 +37,9 @@ public class EasyRecyclerViewUtils {
      * @param listener 状态回调
      * @return
      */
-    public BaseEasyHeader createHeader(Context context, @LayoutRes int layoutId, boolean isSupportHorizontalDrag, @Nullable BaseEasyHeader.BaseOnRefreshListener listener) {
+    public EasyHeader createHeader(Context context, @LayoutRes int layoutId, boolean isSupportHorizontalDrag, @Nullable BaseEasyHeader.BaseOnRefreshListener listener) {
         View view = LayoutInflater.from(context).inflate(layoutId, null, false);
-        BaseEasyHeader header = new BaseEasyHeader(view, isSupportHorizontalDrag);
+        EasyHeader header = new EasyHeader(view, isSupportHorizontalDrag);
         header.setListener(listener);
         return header;
     }
@@ -53,20 +53,22 @@ public class EasyRecyclerViewUtils {
      * @param listener  状态回调
      * @return
      */
-    public BaseEasyFooter createFooter(Context context, @LayoutRes int layoutId, boolean isSupportHorizontalDrag, @Nullable BaseEasyFooter.BaseOnLoadMoreListener listener) {
+    public EasyFooter createFooter(Context context, @LayoutRes int layoutId, boolean isSupportHorizontalDrag, @Nullable BaseEasyFooter.BaseOnLoadMoreListener listener) {
         View view = LayoutInflater.from(context).inflate(layoutId, null, false);
-        BaseEasyFooter footer = new BaseEasyFooter(view, isSupportHorizontalDrag);
+        EasyFooter footer = new EasyFooter(view, isSupportHorizontalDrag);
         footer.setListener(listener);
         return footer;
     }
 
     /**
+     * 需要自己加载对应的类{@link com.scwang.smart.refresh.header.ClassicsHeader}到项目中
      * 创建一个跟{@link com.scwang.smart.refresh.header.ClassicsHeader}一样效果的header<br/>
      * 会有状态回调
      * @param context
      * @param listener  状态回调
      * @return
      */
+    @Deprecated
     public EasyClassicsHeader createClassicsHeader(Context context, @Nullable BaseEasyHeader.BaseOnRefreshListener listener) {
         EasyClassicsHeader header = new EasyClassicsHeader(context);
         header.setListener(listener);
@@ -74,17 +76,37 @@ public class EasyRecyclerViewUtils {
     }
 
     /**
+     * 需要自己加载对应的类{@link com.scwang.smart.refresh.footer.ClassicsFooter}到项目中
      * 创建一个跟{@link com.scwang.smart.refresh.footer.ClassicsFooter}一样效果的footer<br/>
      * 会有状态回调
      * @param context
      * @param listener  状态回调
      * @return
      */
+    @Deprecated
     public EasyClassicsFooter createClassicsFooter(Context context, @Nullable BaseEasyFooter.BaseOnLoadMoreListener listener) {
         EasyClassicsFooter footer = new EasyClassicsFooter(context);
         footer.setListener(listener);
         return footer;
     }
 
+    /**
+     *
+     * @param context
+     * @return
+     */
+    public ClassicsHeader createClassicsHeader(Context context) {
+        ClassicsHeader header = new ClassicsHeader(context);
+        return header;
+    }
 
+    /**
+     *
+     * @param context
+     * @return
+     */
+    public ClassicsFooter createClassicsFooter(Context context) {
+        ClassicsFooter footer = new ClassicsFooter(context);
+        return footer;
+    }
 }

@@ -40,9 +40,12 @@ dependencies {
 
 
     /**----------       ---------------**/
-    implementation 'androidx.appcompat:appcompat:1.0.0'                 //必须 1.0.0 以上
-    api  'com.scwang.smart:refresh-layout-kernel:2.0.1'      //核心必须依赖
-    api  'com.scwang.smart:refresh-header-classics:2.0.1'    //经典刷新头
-    api  'com.scwang.smart:refresh-footer-classics:2.0.1'    //经典加载
+    implementation 'androidx.appcompat:appcompat:1.0.0'      //必须 1.0.0 以上
+    implementation  'com.scwang.smart:refresh-layout-kernel:2.0.1'      //核心必须依赖
+    implementation  'com.scwang.smart:refresh-header-classics:2.0.1'    //经典刷新头
+    implementation  'com.scwang.smart:refresh-footer-classics:2.0.1'    //经典加载
+
+    /**     BRAVH       **/
+//    api 'com.github.CymChad:BaseRecyclerViewAdapterHelper:3.0.4'
 
 }

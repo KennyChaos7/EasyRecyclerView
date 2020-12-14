@@ -1,21 +1,14 @@
 package com.easy.recyclerview;
 
 import android.content.Context;
-import android.graphics.drawable.ColorDrawable;
-import android.os.Build;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
-import androidx.recyclerview.widget.RecyclerView;
-
-import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
+import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.scwang.smart.refresh.layout.SmartRefreshLayout;
-import com.scwang.smart.refresh.layout.api.RefreshFooter;
-import com.scwang.smart.refresh.layout.api.RefreshHeader;
 
 
 /**
@@ -82,6 +75,7 @@ public class EasyRecyclerView {
      * 建造者
      */
     public static class Builder {
+        private Context context = null;
         private EasyRecyclerView me = null;
         private _EasyRecyclerView _easyRecyclerView = null;
 
@@ -96,11 +90,15 @@ public class EasyRecyclerView {
 
         //  是否可以下拉刷新
         private boolean isAllowRefresh = false;
-        private RefreshHeader baseEasyHeader;
+        private BaseEasyHeader<? extends BaseInnerHeader> easyHeader;
 
         //  是否可以上拉加载更多
         private boolean isAllowLoadMore = false;
-        private RefreshFooter baseEasyFooter;
+        private BaseEasyFooter<? extends BaseInnerFooter>  easyFooter;
+
+        public Builder(Context context) {
+            this.context = context;
+        }
 
         public Builder setItemDecoration(RecyclerView.ItemDecoration itemDecoration) {
             this.itemDecoration = itemDecoration;
@@ -112,8 +110,8 @@ public class EasyRecyclerView {
             return this;
         }
 
-        public Builder setHeader(RefreshHeader baseEasyHeader) {
-            this.baseEasyHeader = baseEasyHeader;
+        public Builder setHeader(BaseEasyHeader<? extends BaseInnerHeader> easyHeader) {
+            this.easyHeader = easyHeader;
             return this;
         }
 
@@ -122,8 +120,20 @@ public class EasyRecyclerView {
             return this;
         }
 
-        public Builder setFooter(RefreshFooter baseEasyFooter) {
-            this.baseEasyFooter = baseEasyFooter;
+        public Builder setFooter(BaseEasyFooter<? extends BaseInnerFooter> easyFooter) {
+            this.easyFooter = easyFooter;
+            return this;
+        }
+
+        public Builder setClassicsFooter(@Nullable BaseEasyFooter.BaseOnLoadMoreListener listener) {
+            this.easyFooter = new EasyClassicsFooter(context);
+            this.easyFooter.setListener(listener);
+            return this;
+        }
+
+        public Builder setClassicsHeader(@Nullable BaseEasyHeader.BaseOnRefreshListener listener) {
+            this.easyHeader = new EasyClassicsHeader(context);
+            this.easyHeader.setListener(listener);
             return this;
         }
 
@@ -142,7 +152,7 @@ public class EasyRecyclerView {
             return this;
         }
 
-        public EasyRecyclerView build(Context context) {
+        public EasyRecyclerView build() {
             if (me == null) {
                 /**
                  * 初始化{@link _EasyRecyclerView}和 {@link EasyRecyclerView}
@@ -153,9 +163,9 @@ public class EasyRecyclerView {
                 if (layoutManager != null) _easyRecyclerView.setLayoutManager(layoutManager);
                 if (itemDecoration != null) _easyRecyclerView.setItemDecoration(itemDecoration);
                 _easyRecyclerView.setAllowLoadMore(isAllowLoadMore);
-                if (baseEasyFooter != null) _easyRecyclerView.setBaseEasyFooter(baseEasyFooter);
+                if (easyFooter != null) _easyRecyclerView.setEasyFooter(easyFooter);
                 _easyRecyclerView.setAllowRefresh(isAllowRefresh);
-                if (baseEasyHeader != null) _easyRecyclerView.setBaseEasyHeader(baseEasyHeader);
+                if (easyHeader != null) _easyRecyclerView.setEasyHeader(easyHeader);
                 _easyRecyclerView.setAllowAutoLoadMore(isAllowAutoLoadMore);
                 me = new EasyRecyclerView(context);
             }

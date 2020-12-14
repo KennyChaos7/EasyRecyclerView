@@ -6,18 +6,15 @@ import android.view.ViewGroup;
 
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.scwang.smart.refresh.footer.ClassicsFooter;
-import com.scwang.smart.refresh.header.ClassicsHeader;
 import com.scwang.smart.refresh.layout.SmartRefreshLayout;
-import com.scwang.smart.refresh.layout.api.RefreshFooter;
 import com.scwang.smart.refresh.layout.api.RefreshHeader;
 
 public class _EasyRecyclerView {
 
     private RecyclerView _rv = null;
     private SmartRefreshLayout _srLayout = null;
-    private ClassicsHeader _ch = null;
-    private ClassicsFooter _cf = null;
+    private EasyClassicsHeader _ch = null;
+    private EasyClassicsFooter _cf = null;
 
     private RecyclerView.Adapter adapter;
     private RecyclerView.LayoutManager layoutManager;
@@ -25,10 +22,10 @@ public class _EasyRecyclerView {
     private RecyclerView.ItemDecoration itemDecoration;
 
     private boolean isAllowRefresh;
-    private RefreshHeader baseEasyHeader;
+    private BaseEasyHeader<? extends RefreshHeader> easyHeader;
 
     private boolean isAllowLoadMore;
-    private RefreshFooter baseEasyFooter;
+    private BaseEasyFooter<? extends BaseInnerFooter> easyFooter;
 
     private boolean isAllowAutoLoadMore = false;
 
@@ -41,8 +38,8 @@ public class _EasyRecyclerView {
             _srLayout.addView(_rv, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
             _ch = new EasyClassicsHeader(context);
             _cf = new EasyClassicsFooter(context);
-            _srLayout.setRefreshHeader(_ch);
-            _srLayout.setRefreshFooter(_cf);
+            _srLayout.setRefreshHeader(_ch.toSmartLayout());
+            _srLayout.setRefreshFooter(_cf.toSmartLayout());
         }
 //        initEasyRecyclerView();
     }
@@ -67,9 +64,9 @@ public class _EasyRecyclerView {
         _srLayout.setEnableRefresh(isAllowRefresh);
     }
 
-    public void setBaseEasyHeader(RefreshHeader baseEasyHeader) {
-        this.baseEasyHeader = baseEasyHeader;
-        _srLayout.setRefreshHeader(baseEasyHeader);
+    public void setEasyHeader(BaseEasyHeader<? extends RefreshHeader> easyHeader) {
+        this.easyHeader = easyHeader;
+        _srLayout.setRefreshHeader(easyHeader.toSmartLayout());
     }
 
     public void setAllowLoadMore(boolean allowLoadMore) {
@@ -77,14 +74,18 @@ public class _EasyRecyclerView {
         _srLayout.setEnableLoadMore(isAllowLoadMore);
     }
 
-    public void setBaseEasyFooter(RefreshFooter baseEasyFooter) {
-        this.baseEasyFooter = baseEasyFooter;
-        _srLayout.setRefreshFooter(baseEasyFooter);
+    public void setEasyFooter(BaseEasyFooter<? extends BaseInnerFooter>  easyFooter) {
+        this.easyFooter = easyFooter;
+        _srLayout.setRefreshFooter(easyFooter.toSmartLayout());
     }
 
     public void setAllowAutoLoadMore(boolean allowAutoLoadMore) {
         isAllowAutoLoadMore = allowAutoLoadMore;
         _srLayout.setEnableAutoLoadMore(isAllowAutoLoadMore);
+    }
+
+    public void setUsingClassicsHeader(boolean useClassics) {
+
     }
 
     public RecyclerView getRecyclerView() {
@@ -111,16 +112,8 @@ public class _EasyRecyclerView {
         return isAllowRefresh;
     }
 
-    public RefreshHeader getBaseEasyHeader() {
-        return baseEasyHeader;
-    }
-
     public boolean isAllowLoadMore() {
         return isAllowLoadMore;
-    }
-
-    public RefreshFooter getBaseEasyFooter() {
-        return baseEasyFooter;
     }
 
     public boolean isAllowAutoLoadMore() {
@@ -135,17 +128,17 @@ public class _EasyRecyclerView {
         _srLayout.setEnableRefresh(isAllowRefresh);
         _srLayout.setEnableLoadMore(isAllowLoadMore);
         if (isAllowRefresh) {
-            if (baseEasyHeader != null) {
-                _srLayout.setRefreshHeader(baseEasyHeader);
+            if (easyHeader != null) {
+                _srLayout.setRefreshHeader(easyHeader.toSmartLayout());
             }else {
-                _srLayout.setRefreshHeader(_ch);
+                _srLayout.setRefreshHeader(_ch.toSmartLayout());
             }
         }
         if (isAllowLoadMore) {
-            if (baseEasyFooter != null) {
-                _srLayout.setRefreshFooter(baseEasyFooter);
+            if (easyFooter != null) {
+                _srLayout.setRefreshFooter(easyFooter.toSmartLayout());
             }else {
-                _srLayout.setRefreshFooter(_cf);
+                _srLayout.setRefreshFooter(_cf.toSmartLayout());
             }
         }
     }
