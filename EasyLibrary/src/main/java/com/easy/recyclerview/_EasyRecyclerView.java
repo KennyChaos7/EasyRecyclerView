@@ -34,6 +34,7 @@ public class _EasyRecyclerView {
             _srLayout = new SmartRefreshLayout(context);
             _rv = new RecyclerView(context);
             _srLayout.addView(_rv, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+            _srLayout.setEnableAutoLoadMore(false);
         }
     }
 
