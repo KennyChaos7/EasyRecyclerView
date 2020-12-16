@@ -13,8 +13,6 @@ public class _EasyRecyclerView {
 
     private RecyclerView _rv = null;
     private SmartRefreshLayout _srLayout = null;
-    private EasyClassicsHeader _ch = null;
-    private EasyClassicsFooter _cf = null;
 
     private RecyclerView.Adapter adapter;
     private RecyclerView.LayoutManager layoutManager;
@@ -36,12 +34,7 @@ public class _EasyRecyclerView {
             _srLayout = new SmartRefreshLayout(context);
             _rv = new RecyclerView(context);
             _srLayout.addView(_rv, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-            _ch = new EasyClassicsHeader(context);
-            _cf = new EasyClassicsFooter(context);
-            _srLayout.setRefreshHeader(_ch.toSmartLayout());
-            _srLayout.setRefreshFooter(_cf.toSmartLayout());
         }
-//        initEasyRecyclerView();
     }
 
     public void setAdapter(RecyclerView.Adapter adapter) {
@@ -65,7 +58,6 @@ public class _EasyRecyclerView {
     }
 
     public void setEasyHeader(BaseEasyHeader<? extends RefreshHeader> easyHeader) {
-        this.easyHeader = easyHeader;
         _srLayout.setRefreshHeader(easyHeader.toSmartLayout());
     }
 
@@ -75,17 +67,12 @@ public class _EasyRecyclerView {
     }
 
     public void setEasyFooter(BaseEasyFooter<? extends BaseInnerFooter>  easyFooter) {
-        this.easyFooter = easyFooter;
         _srLayout.setRefreshFooter(easyFooter.toSmartLayout());
     }
 
     public void setAllowAutoLoadMore(boolean allowAutoLoadMore) {
         isAllowAutoLoadMore = allowAutoLoadMore;
         _srLayout.setEnableAutoLoadMore(isAllowAutoLoadMore);
-    }
-
-    public void setUsingClassicsHeader(boolean useClassics) {
-
     }
 
     public RecyclerView getRecyclerView() {
@@ -118,29 +105,6 @@ public class _EasyRecyclerView {
 
     public boolean isAllowAutoLoadMore() {
         return isAllowAutoLoadMore;
-    }
-
-    @Deprecated
-    private void initEasyRecyclerView() {
-        if (itemDecoration != null)
-            _rv.addItemDecoration(itemDecoration);
-        _srLayout.setEnableAutoLoadMore(isAllowAutoLoadMore);
-        _srLayout.setEnableRefresh(isAllowRefresh);
-        _srLayout.setEnableLoadMore(isAllowLoadMore);
-        if (isAllowRefresh) {
-            if (easyHeader != null) {
-                _srLayout.setRefreshHeader(easyHeader.toSmartLayout());
-            }else {
-                _srLayout.setRefreshHeader(_ch.toSmartLayout());
-            }
-        }
-        if (isAllowLoadMore) {
-            if (easyFooter != null) {
-                _srLayout.setRefreshFooter(easyFooter.toSmartLayout());
-            }else {
-                _srLayout.setRefreshFooter(_cf.toSmartLayout());
-            }
-        }
     }
 
 }

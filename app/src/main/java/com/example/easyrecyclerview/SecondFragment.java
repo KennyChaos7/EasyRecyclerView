@@ -9,13 +9,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-import com.easy.recyclerview.BaseEasyFooter;
-import com.easy.recyclerview.BaseEasyHeader;
-import com.easy.recyclerview.EasyRecyclerView;
-import com.easy.recyclerview.EasyRecyclerViewUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,78 +46,78 @@ public class SecondFragment extends Fragment {
         }
         TestAdapter testAdapter = new TestAdapter();
         testAdapter.setData(stringList);
-        EasyRecyclerView easyRecyclerView = new EasyRecyclerView.Builder(getContext())
-                .setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false))
-                .setAdapter(testAdapter)
-                .setAllowLoadMore(true)
-                .setAllowRefresh(true)
-                .setClassicsHeader(new BaseEasyHeader.BaseOnRefreshListener() {
-                    @Override
-                    public void onPullingToRefresh(View v) {
-
-                    }
-
-                    @Override
-                    public void onRefreshStart(View v) {
-
-                    }
-
-                    @Override
-                    public void onRefreshing(View v) {
-
-                    }
-
-                    @Override
-                    public void onFinish(boolean isSuccess, View view) {
-
-                    }
-                })
-                .setFooter(EasyRecyclerViewUtils.getInstance().createFooter(getContext(), R.layout.footer_test, false, new BaseEasyFooter.BaseOnLoadMoreListener() {
-                    @Override
-                    public void onPullingToLoad(View v) {
-
-                    }
-
-                    @Override
-                    public void onLoadMoreStart(View v) {
-
-                    }
-
-                    @Override
-                    public void onLoading(View v) {
-
-                    }
-
-                    @Override
-                    public void onFinish(boolean isSuccess, View view) {
-
-                    }
-                }))
-                .setClassicsFooter(new BaseEasyFooter.BaseOnLoadMoreListener() {
-                    @Override
-                    public void onPullingToLoad(View v) {
-
-                    }
-
-                    @Override
-                    public void onLoadMoreStart(View v) {
-
-                    }
-
-                    @Override
-                    public void onLoading(View v) {
-
-                    }
-
-                    @Override
-                    public void onFinish(boolean isSuccess, View view) {
-
-                    }
-                })
-                .build();
-        viewGroup.addView(
-                        easyRecyclerView.toView()
-        );
+//        EasyRecyclerView easyRecyclerView = new EasyRecyclerView.Builder(getContext())
+//                .setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false))
+//                .setAdapter(testAdapter)
+//                .setAllowLoadMore(true)
+//                .setAllowRefresh(true)
+//                .setClassicsHeader(new BaseEasyHeader.BaseOnRefreshListener() {
+//                    @Override
+//                    public void onPullingToRefresh(View v) {
+//
+//                    }
+//
+//                    @Override
+//                    public void onRefreshStart(View v) {
+//
+//                    }
+//
+//                    @Override
+//                    public void onRefreshing(View v) {
+//
+//                    }
+//
+//                    @Override
+//                    public void onFinish(boolean isSuccess, View view) {
+//
+//                    }
+//                })
+//                .setFooter(EasyRecyclerViewUtils.getInstance().createFooter(getContext(), R.layout.footer_test, false, new BaseEasyFooter.BaseOnLoadMoreListener() {
+//                    @Override
+//                    public void onPullingToLoad(View v) {
+//
+//                    }
+//
+//                    @Override
+//                    public void onLoadMoreStart(View v) {
+//
+//                    }
+//
+//                    @Override
+//                    public void onLoading(View v) {
+//
+//                    }
+//
+//                    @Override
+//                    public void onFinish(boolean isSuccess, View view) {
+//
+//                    }
+//                }))
+//                .setClassicsFooter(new BaseEasyFooter.BaseOnLoadMoreListener() {
+//                    @Override
+//                    public void onPullingToLoad(View v) {
+//
+//                    }
+//
+//                    @Override
+//                    public void onLoadMoreStart(View v) {
+//
+//                    }
+//
+//                    @Override
+//                    public void onLoading(View v) {
+//
+//                    }
+//
+//                    @Override
+//                    public void onFinish(boolean isSuccess, View view) {
+//
+//                    }
+//                })
+//                .build();
+//        viewGroup.addView(
+//                        easyRecyclerView.toView()
+//        );
     }
 
     private class TestVH extends RecyclerView.ViewHolder{
