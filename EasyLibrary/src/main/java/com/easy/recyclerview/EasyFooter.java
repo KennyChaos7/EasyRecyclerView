@@ -12,6 +12,10 @@ import com.scwang.smart.refresh.layout.api.RefreshLayout;
 import com.scwang.smart.refresh.layout.constant.RefreshState;
 import com.scwang.smart.refresh.layout.constant.SpinnerStyle;
 
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
+
 
 /**
  * @Auther: ou
@@ -21,7 +25,7 @@ import com.scwang.smart.refresh.layout.constant.SpinnerStyle;
  *                      {@link EasyRecyclerView.Builder#setFooter(BaseEasyFooter)}}
  */
 public class EasyFooter implements BaseEasyFooter<EasyFooter.InnerFooter> {
-    private BaseOnLoadMoreListener listener = null;
+    private final Set<BaseOnLoadMoreListener> listenerHashSet = Collections.synchronizedSet(new HashSet<BaseOnLoadMoreListener>());
     private View view = null;
     private boolean isSupportHorizontalDrag = false;
     private SpinnerStyle spinnerStyle = null;
@@ -37,7 +41,7 @@ public class EasyFooter implements BaseEasyFooter<EasyFooter.InnerFooter> {
 
     @Override
     public void setListener(@Nullable BaseOnLoadMoreListener listener) {
-        this.listener = listener;
+        listenerHashSet.add(listener);
     }
 
     public void setSpinnerStyle(SpinnerStyle spinnerStyle) {
@@ -90,7 +94,10 @@ public class EasyFooter implements BaseEasyFooter<EasyFooter.InnerFooter> {
 
         @Override
         public int onFinish(@NonNull RefreshLayout refreshLayout, boolean success) {
-            if (listener != null) listener.onFinish(success, view);
+            if (!listenerHashSet.isEmpty()) {
+                for (BaseOnLoadMoreListener listener : listenerHashSet)
+                    listener.onFinish(success, view);
+            }
             return 300;
         }
 
@@ -107,17 +114,19 @@ public class EasyFooter implements BaseEasyFooter<EasyFooter.InnerFooter> {
         @Override
         public void onStateChanged(@NonNull RefreshLayout refreshLayout, @NonNull RefreshState oldState, @NonNull RefreshState newState) {
             Log.i(this.getClass().getSimpleName(), "oldState = " + oldState + " newState = " + newState);
-            if (oldState != newState && listener != null) {
-                switch (newState) {
-                    case PullUpToLoad:
-                        listener.onPullingToLoad(view);
-                        break;
-                    case Loading:
-                        listener.onLoading(view);
-                        break;
-                    case ReleaseToLoad:
-                        listener.onLoadMoreStart(view);
-                        break;
+            if (oldState != newState && !listenerHashSet.isEmpty()) {
+                for (BaseOnLoadMoreListener listener : listenerHashSet) {
+                    switch (newState) {
+                        case PullUpToLoad:
+                            listener.onPullingToLoad(view);
+                            break;
+                        case Loading:
+                            listener.onLoading(view);
+                            break;
+                        case ReleaseToLoad:
+                            listener.onLoadMoreStart(view);
+                            break;
+                    }
                 }
             }
         }

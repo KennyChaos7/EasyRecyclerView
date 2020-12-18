@@ -29,6 +29,8 @@ public class _EasyRecyclerView {
 
     private boolean isAllowAutoLoadMore = false;
 
+    private boolean isAllowAutoShowEmpty = true;
+
     _EasyRecyclerView(Context context) {
         if (_rv != null && _srLayout != null)
             return;
@@ -44,8 +46,16 @@ public class _EasyRecyclerView {
 //        initEasyRecyclerView();
     }
 
+    /**
+     * 监控adapter的数据是否为空, 如果为空则显示空白页
+     * @param adapter
+     */
     public void setAdapter(RecyclerView.Adapter adapter) {
-        this.adapter = adapter;
+        if (adapter instanceof EasyAdapter) {
+
+        }else {
+            this.adapter = adapter;
+        }
         _rv.setAdapter(adapter);
     }
 
@@ -84,8 +94,8 @@ public class _EasyRecyclerView {
         _srLayout.setEnableAutoLoadMore(isAllowAutoLoadMore);
     }
 
-    public void setUsingClassicsHeader(boolean useClassics) {
-
+    public void setAllowAutoShowEmpty(boolean allowAutoShowEmpty) {
+        isAllowAutoShowEmpty = allowAutoShowEmpty;
     }
 
     public RecyclerView getRecyclerView() {
@@ -97,7 +107,7 @@ public class _EasyRecyclerView {
     public View getView() { return _srLayout; }
 
     public RecyclerView.Adapter getAdapter() {
-        return adapter;
+        return _rv.getAdapter();
     }
 
     public RecyclerView.LayoutManager getLayoutManager() {

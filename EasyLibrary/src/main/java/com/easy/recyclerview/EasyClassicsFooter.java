@@ -9,11 +9,15 @@ import com.scwang.smart.refresh.footer.ClassicsFooter;
 import com.scwang.smart.refresh.layout.api.RefreshLayout;
 import com.scwang.smart.refresh.layout.constant.RefreshState;
 
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
+
 /**
  * 直接继承于 {@linkplain EasyFooter}
  */
 public class EasyClassicsFooter implements BaseEasyFooter<EasyClassicsFooter.InnerFooter> {
-    private EasyFooter.BaseOnLoadMoreListener listener = null;
+    private final Set<BaseOnLoadMoreListener> listenerHashSet = Collections.synchronizedSet(new HashSet<BaseOnLoadMoreListener>());
     private InnerFooter _footer = null;
 
     public EasyClassicsFooter(Context context) {
@@ -23,7 +27,7 @@ public class EasyClassicsFooter implements BaseEasyFooter<EasyClassicsFooter.Inn
     }
 
     public void setListener(EasyFooter.BaseOnLoadMoreListener listener) {
-        this.listener = listener;
+        listenerHashSet.add(listener);
     }
 
     @Override
@@ -43,23 +47,28 @@ public class EasyClassicsFooter implements BaseEasyFooter<EasyClassicsFooter.Inn
 
         @Override
         public int onFinish(@NonNull RefreshLayout layout, boolean success) {
-            if (listener != null) listener.onFinish(success, layout.getLayout());
+            if (!listenerHashSet.isEmpty()) {
+                for (BaseOnLoadMoreListener listener : listenerHashSet)
+                    listener.onFinish(success, layout.getLayout());
+            }
             return super.onFinish(layout, success);
         }
 
         @Override
         public void onStateChanged(@NonNull RefreshLayout refreshLayout, @NonNull RefreshState oldState, @NonNull RefreshState newState) {
-            if (oldState != newState && listener != null) {
-                switch (newState) {
-                    case PullUpToLoad:
-                        listener.onPullingToLoad(refreshLayout.getLayout());
-                        break;
-                    case Loading:
-                        listener.onLoading(refreshLayout.getLayout());
-                        break;
-                    case ReleaseToLoad:
-                        listener.onLoadMoreStart(refreshLayout.getLayout());
-                        break;
+            if (oldState != newState && !listenerHashSet.isEmpty()) {
+                for (BaseOnLoadMoreListener listener : listenerHashSet) {
+                    switch (newState) {
+                        case PullUpToLoad:
+                            listener.onPullingToLoad(refreshLayout.getLayout());
+                            break;
+                        case Loading:
+                            listener.onLoading(refreshLayout.getLayout());
+                            break;
+                        case ReleaseToLoad:
+                            listener.onLoadMoreStart(refreshLayout.getLayout());
+                            break;
+                    }
                 }
             }
             super.onStateChanged(refreshLayout, oldState, newState);

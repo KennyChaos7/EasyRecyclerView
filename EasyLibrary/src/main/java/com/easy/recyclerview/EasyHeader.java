@@ -12,6 +12,10 @@ import com.scwang.smart.refresh.layout.api.RefreshLayout;
 import com.scwang.smart.refresh.layout.constant.RefreshState;
 import com.scwang.smart.refresh.layout.constant.SpinnerStyle;
 
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
+
 /**
  * @Auther: ou
  * @Time:   2020-12-12 0012 14:16
@@ -20,6 +24,7 @@ import com.scwang.smart.refresh.layout.constant.SpinnerStyle;
  *                      {@link EasyRecyclerView.Builder#setHeader(BaseEasyHeader)}
  */
 public class EasyHeader implements BaseEasyHeader<EasyHeader.InnerHeader>{
+    private final Set<BaseEasyHeader.BaseOnRefreshListener> listenerHashSet = Collections.synchronizedSet(new HashSet<BaseEasyHeader.BaseOnRefreshListener>());
     private BaseEasyHeader.BaseOnRefreshListener listener = null;
     private SpinnerStyle spinnerStyle = null;
     private View view = null;
@@ -37,7 +42,7 @@ public class EasyHeader implements BaseEasyHeader<EasyHeader.InnerHeader>{
 
     @Override
     public void setListener(@Nullable BaseOnRefreshListener listener) {
-        this.listener = listener;
+        listenerHashSet.add(listener);
     }
 
     public void setSpinnerStyle(SpinnerStyle spinnerStyle) {
@@ -90,7 +95,10 @@ public class EasyHeader implements BaseEasyHeader<EasyHeader.InnerHeader>{
 
         @Override
         public int onFinish(@NonNull RefreshLayout refreshLayout, boolean success) {
-            if (listener != null) listener.onFinish(success, view);
+            if (!listenerHashSet.isEmpty()) {
+                for (BaseEasyHeader.BaseOnRefreshListener listener : listenerHashSet)
+                    listener.onFinish(success, view);
+            }
             return 300;
         }
 
@@ -107,17 +115,19 @@ public class EasyHeader implements BaseEasyHeader<EasyHeader.InnerHeader>{
         @Override
         public void onStateChanged(@NonNull RefreshLayout refreshLayout, @NonNull RefreshState oldState, @NonNull RefreshState newState) {
             Log.i(this.getClass().getSimpleName(), "oldState = " + oldState + " newState = " + newState);
-            if (oldState != newState && listener != null) {
-                switch (newState) {
-                    case PullDownToRefresh:
-                        listener.onPullingToRefresh(view);
-                        break;
-                    case RefreshReleased:
-                        listener.onRefreshStart(view);
-                        break;
-                    case Refreshing:
-                        listener.onRefreshing(view);
-                        break;
+            if (oldState != newState && !listenerHashSet.isEmpty()) {
+                for (BaseEasyHeader.BaseOnRefreshListener listener : listenerHashSet) {
+                    switch (newState) {
+                        case PullDownToRefresh:
+                            listener.onPullingToRefresh(view);
+                            break;
+                        case RefreshReleased:
+                            listener.onRefreshStart(view);
+                            break;
+                        case Refreshing:
+                            listener.onRefreshing(view);
+                            break;
+                    }
                 }
             }
         }

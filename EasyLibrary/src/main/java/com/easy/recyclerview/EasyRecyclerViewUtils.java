@@ -1,6 +1,7 @@
 package com.easy.recyclerview;
 
 import android.content.Context;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 
@@ -108,5 +109,14 @@ public class EasyRecyclerViewUtils {
     public ClassicsFooter createClassicsFooter(Context context) {
         ClassicsFooter footer = new ClassicsFooter(context);
         return footer;
+    }
+
+    /**
+     *  dp转换为px
+     * @param dp
+     * @return
+     */
+    protected int dp2px(Context context, int dp) {
+        return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, context.getResources().getDisplayMetrics());
     }
 }

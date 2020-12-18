@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="empty_tips">
+        We don\'t have any data, maybe you should pull to refresh.
+    </string>
+    <string name="error_tips">
+        We got an error,  maybe you should pull to refresh.
+    </string>
+</resources>
