@@ -1,11 +1,8 @@
 package com.easy.recyclerview;
 
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
-import androidx.annotation.IdRes;
 import androidx.annotation.LayoutRes;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -20,10 +17,10 @@ import java.util.List;
  * @Date:   2020-12-18 0018 14:17
  * @Description:
  */
-public class EasyAdapter<T> extends RecyclerView.Adapter<EasyAdapter.EasyViewHolder> {
+public class EasyAdapter<T> extends RecyclerView.Adapter<EasyViewHolder> {
     private @LayoutRes int itemLayoutId = -1;
     private EasyItemListener itemListener = null;
-    private EasyAdapter.EasyViewHolder viewHolder = null;
+    private EasyViewHolder viewHolder = null;
     private final List<T> arrayList = Collections.synchronizedList(new ArrayList<>());//CopyOnWriteArrayList
 
     public EasyAdapter(@LayoutRes int itemLayoutId,@NonNull EasyAdapter.EasyItemListener listener) {
@@ -65,24 +62,6 @@ public class EasyAdapter<T> extends RecyclerView.Adapter<EasyAdapter.EasyViewHol
     @Override
     public int getItemCount() {
         return arrayList.size();
-    }
-
-    static class EasyViewHolder extends RecyclerView.ViewHolder {
-        public EasyViewHolder(@NonNull View itemView) {
-            super(itemView);
-        }
-
-        public void setText(@IdRes int id, String string) {
-            ((TextView)(this.itemView.findViewById(id))).setText(string);
-        }
-
-        public void setVisible(@IdRes int id, boolean isVisible) {
-            this.itemView.findViewById(id).setVisibility(isVisible ? View.VISIBLE : View.INVISIBLE);
-        }
-
-        public void setHide(@IdRes int id, boolean isHide) {
-            this.itemView.findViewById(id).setVisibility(isHide ? View.GONE : View.VISIBLE);
-        }
     }
 
     public interface EasyItemListener {
