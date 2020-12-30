@@ -1,21 +1,22 @@
 package com.example.easyrecyclerview;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.easy.recyclerview.BaseEasyFooter;
 import com.easy.recyclerview.BaseEasyHeader;
+import com.easy.recyclerview.EasyAdapter;
 import com.easy.recyclerview.EasyRecyclerView;
 import com.easy.recyclerview.EasyRecyclerViewUtils;
+import com.easy.recyclerview.EasyViewHolder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -50,8 +51,16 @@ public class SecondFragment extends Fragment {
         for (int i = 0; i < 50; i ++) {
             stringList.add(new StringBuffer().append(Math.random()).append(" - ").append(i).toString());
         }
+        /*
         TestAdapter testAdapter = new TestAdapter();
         testAdapter.setData(stringList);
+        */
+        TestAdapter testAdapter = new TestAdapter(R.layout.item_test_easy_recyclerview, new EasyAdapter.EasyItemListener() {
+            @Override
+            public void onItemClick(int position, View view) {
+                Log.e(":", position + " view " + view.getClass().getSimpleName());
+            }
+        });
         EasyRecyclerView easyRecyclerView = new EasyRecyclerView.Builder(getContext())
                 .setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false))
                 .setAdapter(testAdapter)
@@ -124,8 +133,10 @@ public class SecondFragment extends Fragment {
         viewGroup.addView(
                         easyRecyclerView.toView()
         );
+        testAdapter.setNewData(stringList);
     }
 
+    /*
     private class TestVH extends RecyclerView.ViewHolder{
         public TestVH(@NonNull View itemView) {
             super(itemView);
@@ -156,6 +167,18 @@ public class SecondFragment extends Fragment {
         @Override
         public int getItemCount() {
             return stringList.size();
+        }
+    }*/
+
+    private class TestAdapter extends EasyAdapter<String>  {
+
+        public TestAdapter(int itemLayoutId, @NonNull EasyItemListener listener) {
+            super(itemLayoutId, listener);
+        }
+
+        @Override
+        public void onEasyBindViewHolder(@NonNull EasyViewHolder holder, int position) {
+            holder.setText(R.id.textview, getData(position));
         }
     }
 }
